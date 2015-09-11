@@ -1,32 +1,36 @@
+import random
+
 
 def create(content, order):
     chain = {}
+    chaintop = chain
+    print len(content)
     for i in range(0,len(content)-order-1):
-        
-        tempchain = chain
-
+        print "JEE"
         #first traverse throug the dictionary structure,
         #and create the new dictionaries needed
         for j in range(0, order):
-            if tempchain.has_key(content[i+j]):
-               tempchain = tempchain[content[i+j]]
+            if chain.has_key(content[i+j]):
+               chain = chain[content[i+j]]
             else:
-                tempchain[content[i+j]] = {}
-                tempchain = tempchain[content[i+j]]
+                chain[content[i+j]] = {}
+                chain = chain[content[i+j]]
 
         #increase the counter for sum of amounts of successors
 
-        if(tempchain.has_key('COUNTER')):
-            tempchain['COUNTER'] = tempchain['COUNTER']+1
-        else:
-            tempchain['COUNTER'] = 1
+        #if(chain.has_key('COUNTER')):
+        #    chain['COUNTER'] = chain['COUNTER']+1
+        #else:
+        #    chain['COUNTER'] = 1
 
         #increase the counter that the word precedes the n-gram
             
-        if(tempchain.has_key(content[i+order])):
-            tempchain[content[i+order]] = tempchain[content[i+order]]+1
+        if(chain.has_key(content[i+order])):
+            chain[content[i+order]] = chain[content[i+order]]+1
         else:
-            tempchain[content[i+order]] = 1
+            chain[content[i+order]] = 1
+        chain = chaintop
+        print json.dumps(chain)
 
     markov = Markov_chain()
     markov.order = order
@@ -39,15 +43,15 @@ class Markov_chain:
     order = 0
     chain = {}
 
-    def generate(seed, length):
-        result = ['']*length
-
-    
-    
-
-                                 
-
-
-
-
-
+    def generate(self, nwords):
+        random.seed()
+        result = ['']*(nwords)
+        #first generate a random order-length sequence from the seed
+        curr_dict = self.chain
+        for i in range(0,self.order):
+            key_list = curr_dict.keys()
+            result[i] = key_list[random.randint(0, len(key_list)-1)]
+            curr_dict = curr_dict[result[i]]
+        print ' '.join(result[0:self.order])
+        
+            
