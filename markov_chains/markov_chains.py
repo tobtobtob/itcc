@@ -1,27 +1,21 @@
+
 import random
 
 
 def create(content, order):
     chain = {}
     chaintop = chain
-    print len(content)
     for i in range(0,len(content)-order-1):
-        print "JEE"
+        
         #first traverse throug the dictionary structure,
         #and create the new dictionaries needed
+        
         for j in range(0, order):
             if chain.has_key(content[i+j]):
                chain = chain[content[i+j]]
             else:
                 chain[content[i+j]] = {}
                 chain = chain[content[i+j]]
-
-        #increase the counter for sum of amounts of successors
-
-        #if(chain.has_key('COUNTER')):
-        #    chain['COUNTER'] = chain['COUNTER']+1
-        #else:
-        #    chain['COUNTER'] = 1
 
         #increase the counter that the word precedes the n-gram
             
@@ -30,7 +24,7 @@ def create(content, order):
         else:
             chain[content[i+order]] = 1
         chain = chaintop
-        print json.dumps(chain)
+        
 
     markov = Markov_chain()
     markov.order = order
@@ -44,14 +38,33 @@ class Markov_chain:
     chain = {}
 
     def generate(self, nwords):
+        
         random.seed()
-        result = ['']*(nwords)
+        result = ['']*(nwords)       
         #first generate a random order-length sequence from the seed
         curr_dict = self.chain
-        for i in range(0,self.order):
+        for i in range(0, self.order):
             key_list = curr_dict.keys()
             result[i] = key_list[random.randint(0, len(key_list)-1)]
             curr_dict = curr_dict[result[i]]
-        print ' '.join(result[0:self.order])
+            
+       
         
+        for i in range(0, nwords-self.order):
+            curr_dict = self.chain
+            
+            for j in range(0, self.order):
+                curr_dict = curr_dict[result[i+j]]
+                
+            total = sum(curr_dict.values())
+            randval = random.randint(1, total)
+            accum = 0
+            for k in curr_dict.keys():
+                accum += curr_dict[k]
+                if accum >= randval:
+                    result[i+self.order] = k
+                    break
+                
+                
+        return ' '.join(result)
             
