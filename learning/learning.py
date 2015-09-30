@@ -31,7 +31,7 @@ def extract_lbp_histogram(image, regions=(3,3)):
             
         
 
-def extract_features(image, types=['lbp-histogram']):
+def extract_features(image, types=['lbp']):
     #todo: add different types of features, now only pixels possible
     for t in types:
         if t == 'pixels':
@@ -86,9 +86,7 @@ def test(pos_folder, neg_folder, ext='.pgm', feature_types=['lbp'],
     print "positives: ", pos_ones, "/", len(pos_results), " correct"
     print "negatives: ", (len(neg_results)-neg_ones), "/", len(neg_results), " correct"
     
-train()    
-test('test/face', 'test/non-face')
-    
+
 
 
 
