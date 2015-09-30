@@ -27,11 +27,13 @@ pset.addPrimitive(protectedDiv, 2)
 pset.addPrimitive(operator.abs, 1)
 pset.addEphemeralConstant("rand1",lambda: random.randint(0,5))
 pset.addEphemeralConstant("rand2",lambda: random.randint(0,5))
+pset.addEphemeralConstant("rand3",lambda: random.randint(0,5))
+pset.addEphemeralConstant("rand4",lambda: random.randint(0,5))
 
 
 
 
-imagesize = 20
+imagesize = 19
 
 def evaluate(individual):
 	func = toolbox.compile(individual)
@@ -40,9 +42,9 @@ def evaluate(individual):
 		for j in range(imagesize):
 			test[i][j] = func(i, j)%256
 	clf = joblib.load('../learning/classifier/classifier.pkl')
-	fit = clf.predict(extract_features(test))
+	fit = clf.predict_proba(extract_features(test))
        
-	return fit, 
+	return fit[0][1], 
 
 creator.create("FitnessMin", base.Fitness, weights=(1.0,))
 creator.create("Individual", gp.PrimitiveTree, fitness=creator.FitnessMin)
@@ -64,7 +66,7 @@ toolbox.decorate("mutate", gp.staticLimit(key=operator.attrgetter("height"), max
 random.seed(time.time())
 pop = toolbox.population(n=100)
 hof = tools.HallOfFame(1)
-mateprob = 0.1
+mateprob = 0.7
 mutprob = 0.5
 generations = 100
 pop = algorithms.eaSimple(pop, toolbox, mateprob, mutprob, generations, halloffame=hof, verbose=False)
